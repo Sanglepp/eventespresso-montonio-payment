@@ -83,17 +83,39 @@ class MontonioPayment
 
     public function getPaymentUrl($payment, $provider, $notify_url, $return_url)
     {
+
+				$events = $payment->get_first_event();
+				$event_list = array();
+				$event_list_ids = array();
+				if(is_array($events)){
+					foreach($events AS $event){
+						$event_list_ids[] = $event->ID();
+					}
+				} else {
+					$event_list_ids[] = $events->ID();
+				}
+				$paymentDescription = 'Registreerimine sündmusele:' .  " " . implode('; ', $event_list_ids);
+				if(strlen($paymentDescription) > 93){
+					$paymentDescription = implode('; ', $event_list_ids);
+				}
+
+				$atendee__first_name = $payment->get_primary_attendee()->fname();
+				$atendee__last_name = $payment->get_primary_attendee()->lname();
+
         $paymentData = array(
 				'amount'                    => $payment->amount(), // Make sure this is a float
 				'currency'                  => 'EUR', // Currently only EUR is supported
 				'merchant_reference'        => $payment->txn_id_chq_nmbr(), // The order id in your system
 				'merchant_name'             => $this->merchantName,
 				'checkout_email'            => $this->merchantEmail,
+				'payment_information_unstructured'            => $paymentDescription,
 				'merchant_notification_url' => $notify_url, // We will send a webhook after the payment is complete
 				'merchant_return_url'       => $return_url, // Where to redirect the customer to after the payment
 				'preselected_country'       => 'EE',
 				'preselected_aspsp'         => $this->banks[$provider], // The preselected ASPSP identifier
-				'preselected_locale'        => 'et' // See available locale options in the docs
+				'preselected_locale'        => 'et', // See available locale options in the docs,
+				'checkout_first_name'				=> $atendee__first_name,
+				'checkout_last_name'				=> $atendee__last_name
 		);
 
 		$this->paymentSdk->setPaymentData($paymentData);
