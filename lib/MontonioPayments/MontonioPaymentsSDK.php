@@ -94,6 +94,7 @@ class MontonioPaymentsSDK
             'checkout_first_name'   => (string) $this->_paymentData['checkout_first_name'],
             'checkout_last_name'    => (string) $this->_paymentData['checkout_last_name'],
             'checkout_phone_number' => (string) $this->_paymentData['checkout_phone_number'],
+            'payment_information_unstructured' => (string) $this->_paymentData['payment_information_unstructured'],
         );
 
         if (isset($this->_paymentData['merchant_notification_url'])) {

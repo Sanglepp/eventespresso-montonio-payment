@@ -108,7 +108,7 @@ class MontonioPayment
 				'merchant_reference'        => $payment->txn_id_chq_nmbr(), // The order id in your system
 				'merchant_name'             => $this->merchantName,
 				'checkout_email'            => $this->merchantEmail,
-				'payment_information_unstructured'            => $paymentDescription,
+				'payment_information_unstructured' => $paymentDescription,
 				'merchant_notification_url' => $notify_url, // We will send a webhook after the payment is complete
 				'merchant_return_url'       => $return_url, // Where to redirect the customer to after the payment
 				'preselected_country'       => 'EE',
